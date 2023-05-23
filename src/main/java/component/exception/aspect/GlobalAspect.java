@@ -12,6 +12,6 @@ import java.lang.annotation.Target;
  * @Description: 全局切面代理
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
+@Target(ElementType.METHOD)
 public @interface GlobalAspect {
 }

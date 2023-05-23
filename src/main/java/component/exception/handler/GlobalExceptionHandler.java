@@ -1,7 +1,9 @@
 package component.exception.handler;
 
+import com.google.gson.JsonIOException;
 import component.constant.ErrorConstant;
 import component.exception.entity.BizException;
+import component.exception.entity.Message;
 import component.exception.entity.Response;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
@@ -31,6 +33,33 @@ public class GlobalExceptionHandler {
     public Response exceptionHandler(Exception exception){
         return Response.failed(ErrorConstant.SYSTEM_UNKNOWN_CODE, ErrorConstant.SYSTEM_UNKNOWN_MSG);
     }
+
+    /**
+     * json转换异常
+     * @param jsonIOException
+     * @return
+     */
+    @ExceptionHandler(value = JsonIOException.class)
+    @ResponseBody
+    public Response bizExceptionHandler(JsonIOException jsonIOException){
+        return Response.getResponse(new Message() {
+            @Override
+            public String getCode() {
+                return ErrorConstant.COMMON_JSON_HANDLER_CODE;
+            }
+
+            @Override
+            public String getMsg() {
+                return ErrorConstant.COMMON_JSON_HANDLER_MSG;
+            }
+
+            @Override
+            public Object getData() {
+                return jsonIOException.toString();
+            }
+        });
+    }
+
 
     /**
      * 自定义业务处理异常
